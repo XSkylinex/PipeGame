@@ -1,16 +1,51 @@
 package classes;
-
+// TJP7-XWAW-3B7T-RWXX-RRCP
 import enums.Direction;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Tile {
+    private
 
     private char ch;
     private int row;
     private int column;
 
+    public Tile rotate()
+    {
+        switch (this.ch) {
+            case '-': {
+                this.ch = '|';
+                break;
+            }
+            case '|': {
+                this.ch = '-';
+                break;
+            }
+            case '7': {
+                this.ch = 'J';
+                break;
+            }
+            case 'J': {
+                this.ch = 'L';
+                break;
+            }
+            case 'L': {
+                this.ch = 'F';
+                break;
+            }
+            case 'F': {
+                this.ch = '7';
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+        return this;
+    }
 
 
     public boolean isStart()
