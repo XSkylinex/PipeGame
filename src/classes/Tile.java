@@ -1,5 +1,5 @@
 package classes;
-// TJP7-XWAW-3B7T-RWXX-RRCP
+
 import enums.Direction;
 
 import java.util.ArrayList;
