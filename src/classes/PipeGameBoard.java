@@ -1,10 +1,8 @@
 package classes;
 
-import Interfaces.Searchable;
-
 import java.util.Collection;
 
-public class PipeGameBoard implements Searchable<char[][]> {
+public class PipeGameBoard{
 
     private Tile[][] board;
     private int rows;
@@ -12,24 +10,17 @@ public class PipeGameBoard implements Searchable<char[][]> {
 
 
 
-    public PipeGameBoard(String stBoard)
-    {
+    public PipeGameBoard(String stBoard) {
 
     }
 
 
-    @Override
-    public State<char[][]> getInitialState() {
+    public Collection<PipeGameBoard> getAllRotation(){
         return null;
     }
 
-    @Override
-    public Collection<State<char[][]>> getAllPossibleStates(State<char[][]> s) {
-        return null;
+    public boolean isSolved(){
+        return true;
     }
 
-    @Override
-    public Boolean IsGoalState(State<char[][]> s) {
-        return null;
-    }
 }

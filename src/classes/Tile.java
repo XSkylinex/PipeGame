@@ -4,6 +4,7 @@ import enums.Direction;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class Tile {
 
@@ -200,28 +201,18 @@ public class Tile {
     }
 
     @Override
-    public int hashCode() { // primary number from tile
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ch;
-        result = prime * result + column;
-        result = prime * result + row;
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tile tile = (Tile) o;
+        return ch == tile.ch &&
+                row == tile.row &&
+                column == tile.column;
     }
 
     @Override
-    public boolean equals(Object obj) { // check if the object the same instance/tile
-        if (!(obj instanceof Tile))
-            return false;
-        if (obj == this)
-            return true;
-        return this.equals(((Tile) obj));
-    }
-
-    public boolean equals(Tile tile) { // get tile the check if the same tile
-        return this.ch==tile.ch&&
-                this.row==tile.row&&
-                this.column==tile.column;
+    public int hashCode() {
+        return Objects.hash(ch, row, column);
     }
 
     @Override
@@ -232,4 +223,5 @@ public class Tile {
     public Double countDistance(Tile tile){
         return Math.hypot(tile.row-this.row,tile.column-this.column);
     }
+
 }
