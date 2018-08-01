@@ -1,4 +1,4 @@
 package adapters;
 
-public class SearcherAdapter {
+public class SearcherAdapter {///from Searcher to Solver
 }
