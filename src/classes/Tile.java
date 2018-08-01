@@ -11,8 +11,6 @@ public class Tile {
     private int row;
     private int column;
 
-    //public Tile(Tile )
-
     public Tile rotate()
     {
         switch (this.ch) {
@@ -126,7 +124,7 @@ public class Tile {
         if(rotationTimes == 's' || rotationTimes == 'g' || rotationTimes ==' '){
             return 0;
         }
-        return 4;
+        return 3;
     }
 
     public Direction nearbyPipe(){
