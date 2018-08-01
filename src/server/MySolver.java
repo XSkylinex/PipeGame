@@ -1,6 +1,7 @@
 package server;
 
 import Interfaces.Searchable;
+import classes.Solution;
 
 public class MySolver<T> implements Solver<T> {
 

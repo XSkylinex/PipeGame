@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Tile {
-    private
 
     private char ch;
     private int row;
     private int column;
+
+    //public Tile(Tile )
 
     public Tile rotate()
     {
@@ -48,29 +49,26 @@ public class Tile {
     }
 
 
-    public boolean isStart()
-    {
+    public boolean isStart(){
         return getCh()=='s';
     }
-    public boolean isGoal()
-    {
+
+    public boolean isGoal(){
+
         return getCh()=='g';
     }
-    public boolean isBlank()
-    {
+    public boolean isBlank(){
+
         return getCh()==' ';
     }
-    public boolean isStraightLine()
-    {
+    public boolean isStraightLine(){
         return getCh()=='-'||getCh()=='|';
     }
-    public boolean isRightAngle()
-    {
+    public boolean isRightAngle(){
         return getCh()=='7'|| getCh()=='J'|| getCh()=='L'|| getCh()=='F';
     }
 
-    public Collection<Direction> getDirections()
-    {
+    public Collection<Direction> getDirections(){
         Collection<Direction> directions=new ArrayList<Direction>();
         switch (this.ch) {
             case 's': {
@@ -119,5 +117,19 @@ public class Tile {
             }
         }
         return directions;
+    }
+
+    public int countRotations(char rotationTimes){
+        if(rotationTimes == '|' || rotationTimes == '-'){
+            return 1;
+        }
+        if(rotationTimes == 's' || rotationTimes == 'g' || rotationTimes ==' '){
+            return 0;
+        }
+        return 4;
+    }
+
+    public Direction nearbyPipe(){
+        return null;
     }
 }

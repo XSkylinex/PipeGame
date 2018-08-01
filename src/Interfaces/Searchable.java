@@ -1,5 +1,9 @@
 package Interfaces;
 
+import classes.State;
+
+import java.util.Collection;
+
 public interface Searchable<T> {
 
     public State<T> getInitialState();

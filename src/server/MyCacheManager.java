@@ -1,5 +1,7 @@
 package server;
 
+import classes.Solution;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
