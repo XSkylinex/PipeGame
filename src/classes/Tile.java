@@ -11,7 +11,11 @@ public class Tile {
     private int row;
     private int column;
 
-    //public Tile(Tile )
+    public Tile(char ch, int row, int column) {
+        this.ch = ch;
+        this.row = row;
+        this.column = column;
+    }
 
     public Tile rotate()
     {
@@ -48,6 +52,29 @@ public class Tile {
         return this;
     }
 
+    public char getCh() {
+        return ch;
+    }
+
+    public void setCh(char ch) {
+        this.ch = ch;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
+    }
 
     public boolean isStart(){
         return getCh()=='s';
@@ -119,17 +146,90 @@ public class Tile {
         return directions;
     }
 
-    public int countRotations(char rotationTimes){
-        if(rotationTimes == '|' || rotationTimes == '-'){
-            return 1;
+    public int countRotations(){
+        if(this.ch == '|' || this.ch == '-'){
+            return 2;
         }
-        if(rotationTimes == 's' || rotationTimes == 'g' || rotationTimes ==' '){
-            return 0;
+        if(this.ch == 's' || this.ch == 'g' || this.ch ==' '){
+            return 1;
         }
         return 4;
     }
 
-    public Direction nearbyPipe(){
+    public Direction isTilesNeighbors(Tile tile){ //If the tiles ​​are neighbors
+        //if(this.row==tile.row && this.column == tile.column){
+        //    throw new Exception("Same tile");
+        //}
+        if(this.row==tile.row+1 && this.column == tile.column){
+            return Direction.down;
+        }
+        if(this.row==tile.row && this.column == tile.column+1){
+            return Direction.right;
+        }
+        if(this.row==tile.row-1 && this.column == tile.column){
+            return Direction.up;
+        }
+        if(this.row==tile.row && this.column == tile.column-1){
+            return Direction.left;
+        }
         return null;
+    }
+
+    public boolean tilesAreConnect(Tile tile){ // Checks if tiles are connected
+        return this.getDirections().contains(this.isTilesNeighbors(tile))&&
+                tile.getDirections().contains(tile.isTilesNeighbors(this));
+    }
+
+    protected Tile clone(){ // create new instance
+        return new Tile(ch,row,column);
+    }
+
+    public Tile defaultTile(){ // set to default tile
+        Tile tile=this.clone();
+        switch (this.ch) {
+            case '7': case 'J': case 'L': case 'F': {
+                tile.setCh('7');
+                break;
+            }
+            case '-': case '|': {
+                tile.setCh('-');
+                break;
+            }
+        }
+        return tile;
+    }
+
+    @Override
+    public int hashCode() { // primary number from tile
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ch;
+        result = prime * result + column;
+        result = prime * result + row;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) { // check if the object the same instance/tile
+        if (!(obj instanceof Tile))
+            return false;
+        if (obj == this)
+            return true;
+        return this.equals(((Tile) obj));
+    }
+
+    public boolean equals(Tile tile) { // get tile the check if the same tile
+        return this.ch==tile.ch&&
+                this.row==tile.row&&
+                this.column==tile.column;
+    }
+
+    @Override
+    public String toString() {
+        return ch+"";
+    }
+    
+    public Double countDistance(Tile tile){
+        return Math.hypot(tile.row-this.row,tile.column-this.column);
     }
 }
