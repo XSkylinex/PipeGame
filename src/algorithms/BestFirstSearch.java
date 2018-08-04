@@ -1,4 +1,4 @@
 package algorithms;
 
-public class BestFirstSearch {
+public class BestFirstSearch { //to do this today
 }

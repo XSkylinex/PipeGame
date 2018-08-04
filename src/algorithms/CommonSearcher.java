@@ -7,10 +7,10 @@ import classes.State;
 
 import java.util.*;
 
-public abstract class CommonSearcher<T> implements Searcher<T> {
+public abstract class CommonSearcher<T> implements Searcher<T>{
     protected Collection<State<T>> openList;
     private int evaluatedNodes;
-    public CommonSearcher() { //create new search
+    public CommonSearcher(){ //create new search
         newSearch();
     }
 
@@ -22,17 +22,17 @@ public abstract class CommonSearcher<T> implements Searcher<T> {
         this.evaluatedNodes = evaluatedNodes; // how many nodes we pass
     }
 
-    protected int getEvaluatedNodes() { //return what we pass
+    protected int getEvaluatedNodes(){ //return what we pass
         return evaluatedNodes;
     }
 
     @Override
-    public int getNumberOfNodesEvaluated() { // return what we pass
+    public int getNumberOfNodesEvaluated(){ // return what we pass
         return getEvaluatedNodes();
     }
 
 
-    protected Solution<T> backTrace(State<T> goalState, State<T> startState) throws Exception { // this function return all steps we did and add to collection
+    protected Solution<T> backTrace(State<T> goalState, State<T> startState) throws Exception{ // this function return all steps we did and add to collection
         ArrayList<State<T>> arrayList=new ArrayList<>();
         arrayList.add(goalState);
         while(arrayList.get(0)!=null&&!arrayList.get(0).equals(startState)&&arrayList.get(0).getCameFrom()!=null){
@@ -45,7 +45,7 @@ public abstract class CommonSearcher<T> implements Searcher<T> {
     }
 
     @Override
-    public Solution<T> Search(Searchable<T> s) { // from algorithm to OOP Presentation number 9
+    public Solution<T> Search(Searchable<T> s){ // from algorithm to OOP Presentation number 9
         newSearch();
         addToOpenList(s.getInitialState());
         Set<State<T>> closedSet=new HashSet<>();
