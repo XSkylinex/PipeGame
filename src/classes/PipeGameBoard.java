@@ -41,7 +41,7 @@ public class PipeGameBoard{
         }
     }
 
-    private Tile getTile(int row,int col) throws Exception {
+    protected Tile getTile(int row,int col) throws Exception {
         if(0<=row&&row<this.rows&&0<=col&&col<this.columns)
             return this.board[row][col];
         throw new Exception("Out of Board");
