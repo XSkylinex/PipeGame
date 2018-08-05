@@ -149,12 +149,12 @@ public class Tile {
 
     public int countRotations(){
         if(this.ch == '|' || this.ch == '-'){
-            return 2;
-        }
-        if(this.ch == 's' || this.ch == 'g' || this.ch ==' '){
             return 1;
         }
-        return 4;
+        if(this.ch == 's' || this.ch == 'g' || this.ch ==' '){
+            return 0;
+        }
+        return 3;
     }
 
     public Direction isTilesNeighbors(Tile tile){ //If the tiles ​​are neighbors
@@ -176,7 +176,7 @@ public class Tile {
         return null;
     }
 
-    public boolean tilesAreConnect(Tile tile){ // Checks if tiles are connected
+    public boolean istilesAreConnect(Tile tile){ // Checks if tiles are connected
         return this.getDirections().contains(this.isTilesNeighbors(tile))&&
                 tile.getDirections().contains(tile.isTilesNeighbors(this));
     }
