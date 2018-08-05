@@ -7,10 +7,10 @@ import classes.State;
 
 import java.util.*;
 
-public abstract class CommonSearcher<T> implements Searcher<T> {
+public abstract class CommonSearcher<T> implements Searcher<T>{
     protected Collection<State<T>> openList;
     private int evaluatedNodes;
-    public CommonSearcher() { //create new search
+    public CommonSearcher(){ //create new search
         newSearch();
     }
 
@@ -22,12 +22,12 @@ public abstract class CommonSearcher<T> implements Searcher<T> {
         this.evaluatedNodes = evaluatedNodes; // how many nodes we pass
     }
 
-    protected int getEvaluatedNodes() { //return what we pass
+    protected int getEvaluatedNodes(){ //return what we pass
         return evaluatedNodes;
     }
 
     @Override
-    public int getNumberOfNodesEvaluated() { // return what we pass
+    public int getNumberOfNodesEvaluated(){ // return what we pass
         return getEvaluatedNodes();
     }
 
