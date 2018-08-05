@@ -61,15 +61,15 @@ public class MyClientHandler implements ClientHandler {
 
 
     public PipeGameBoard solveBoard(PipeGameBoard pipeGameBoardProblem) {
-        String nameofproblem=pipeGameBoardProblem.defaultPipeGameBoard().toString();
-        Solution<PipeGameBoard> solution=new Solution<>();
-        if(this.cacheManager.isFileExist(nameofproblem)){
+        String nameofproblem=pipeGameBoardProblem.defaultPipeGameBoard().toString(); //give name problem
+        Solution<PipeGameBoard> solution=new Solution<>(); // create solution
+        if(this.cacheManager.isFileExist(nameofproblem)){ // check if file exist in cache
             try {
-                solution=this.cacheManager.loadFile(nameofproblem);
+                solution=this.cacheManager.loadFile(nameofproblem); // if exist load the file
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else {
+        }else { //else solve the problem and save in the cache
             solution=mySolver.solve(new PipeGameBoardSearchable(pipeGameBoardProblem));
             try {
                 this.cacheManager.saveFile(nameofproblem,solution);
@@ -78,7 +78,7 @@ public class MyClientHandler implements ClientHandler {
             }
 
         }
-        ArrayList<State<PipeGameBoard>> pipeGameBoardSolution=solution.getSolution();
+        ArrayList<State<PipeGameBoard>> pipeGameBoardSolution=solution.getSolution(); // get the solution and return the goal state
         return pipeGameBoardSolution.get(pipeGameBoardSolution.size()-1).getState();
     }
 }
