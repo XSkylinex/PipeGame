@@ -1,12 +1,21 @@
 package server;
 
+import algorithms.DepthFirstSearch;
 import classes.PipeGameBoard;
 import classes.Rotations;
+import classes.Solution;
+import classes.State;
+import searchables.PipeGameBoardSearchable;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class MyClientHandler implements ClientHandler {
+
+    Solver<PipeGameBoard> mySolver=new MySolver<>(new DepthFirstSearch<>());
+    CacheManager<Solution<PipeGameBoard>> cacheManager= new MyCacheManager<>();
+
     @Override
     public void handleClient(InputStream inFromClient, OutputStream outToClient) {
         BufferedReader clientInput=new BufferedReader(new InputStreamReader(inFromClient));
@@ -52,7 +61,25 @@ public class MyClientHandler implements ClientHandler {
 
 
     public PipeGameBoard solveBoard(PipeGameBoard pipeGameBoardProblem) {
-        return null;
+        String nameofproblem=pipeGameBoardProblem.defaultPipeGameBoard().toString();
+        Solution<PipeGameBoard> solution=new Solution<>();
+        if(this.cacheManager.isFileExist(nameofproblem)){
+            try {
+                solution=this.cacheManager.loadFile(nameofproblem);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            solution=mySolver.solve(new PipeGameBoardSearchable(pipeGameBoardProblem));
+            try {
+                this.cacheManager.saveFile(nameofproblem,solution);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        ArrayList<State<PipeGameBoard>> pipeGameBoardSolution=solution.getSolution();
+        return pipeGameBoardSolution.get(pipeGameBoardSolution.size()-1).getState();
     }
 }
 
