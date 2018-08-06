@@ -36,6 +36,7 @@ public class MyClientHandler implements ClientHandler {
             outtoClient.println(commend);
             outtoClient.flush();
         }
+        //System.out.println("done client");
         outtoClient.println("done");
         outtoClient.flush();
         outtoClient.close();
@@ -46,8 +47,8 @@ public class MyClientHandler implements ClientHandler {
     private void readInputsAndSend(BufferedReader in, PrintWriter out, String exitStr){
         try {
             String line;
-            while(!(line=in.readLine()).equals(exitStr))
-            {
+            while(!(line=in.readLine()).equals(exitStr)){
+
                 out.println(line);
                 out.flush();
             }
@@ -67,14 +68,14 @@ public class MyClientHandler implements ClientHandler {
             try {
                 solution=this.cacheManager.loadFile(nameofproblem); // if exist load the file
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }else { //else solve the problem and save in the cache
             solution=mySolver.solve(new PipeGameBoardSearchable(pipeGameBoardProblem));
             try {
                 this.cacheManager.saveFile(nameofproblem,solution);
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
         }

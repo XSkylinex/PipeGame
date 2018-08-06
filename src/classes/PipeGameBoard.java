@@ -68,11 +68,16 @@ public class PipeGameBoard{
                 try {
                     Tile tile = clone.getTile(i, j);
                     if (!tile.isBlank() && !tile.isStart() && !tile.isGoal()) {
+
                         int rotationcount = tile.countRotations();
                         for (int r = 0; r < rotationcount; r++) {
                             clone.getTile(i, j).rotate();
-                            PipeGameBoard pipeGameBoard = clone.clone();
-                            gameBoardCollection.add(pipeGameBoard);
+                            //System.out.println("working on row:"+i+" col:"+j+" tile:"+tile.toString());
+                            if(clone.isTilesConnectedToStart(clone.getTile(i, j))) {
+                                //System.out.println("tile in row:"+i+" col:"+j+" tile:"+tile.toString()+" conncted to start");
+                                PipeGameBoard pipeGameBoard = clone.clone();
+                                gameBoardCollection.add(pipeGameBoard);
+                            }
                         }
                     }
                 } catch (Exception e){
@@ -80,6 +85,7 @@ public class PipeGameBoard{
                 }
             }
         }
+        //System.out.println("size of gameBoardCollection:"+gameBoardCollection.size());
         return gameBoardCollection;
     }
 
@@ -87,7 +93,13 @@ public class PipeGameBoard{
         Collection<Tile> tilesgoals=getGoalsIndex(); // we create collection of all goals on the board
         boolean flag;
         for(Tile tgoal:tilesgoals){ // we ues for each to Search on goals
-            flag=isTilesConnectedToStart(tgoal);
+            flag=isTilesConnected(tgoal, new Predicate<Tile>() {
+
+                @Override
+                public boolean test(Tile t) {
+                    return t.isStart();
+                }
+            });
             if(!flag){
                 return false; // not connected return false
             }
@@ -102,71 +114,154 @@ public class PipeGameBoard{
         return isTilesConnected(tile, Tile::isGoal); // !!!----here is lambda expression----!!! here we check if we connected to the goal
     }
 
-    private boolean isTilesConnected(Tile tile, Predicate<Tile> tilePredicate){ // this function check the connects batten pipes
-        Queue<Tile> queue=new LinkedList<>(); // Create queue
-        HashSet<Tile> closedSet=new HashSet<>(); // Crate HashSet check the black hols for not step on the same tile twitch
-        queue.add(tile); // add to queue
-        while(!queue.isEmpty()){
+    public Collection<Tile> getNeighbors(final Tile tile)
+    {
+        Collection<Tile> arrayList=new ArrayList<>();
+        int row=tile.getRow();
+        int col=tile.getColumn();
+        Tile tile2=null;
+        Collection<Direction> directions=tile.getDirections();
+        for(Direction d:directions)
+        {
+            tile2=getTileByTileAndDir(tile,d);
+            if(tile2!=null)
+            {
+                if(isTilesNeighbors(tile,tile2))
+                {
+                    arrayList.add(tile2);
+                }
+            }
+        }
+        return arrayList;
+    }
 
-            Tile n=queue.remove(); // algorithm 1 to be continue
-            closedSet.add(n);
-            try{
-                if(tilePredicate.test(n)){
+    private Tile getTileByTileAndDir(Tile tile,Direction direction)
+    {
+        try {
+        switch (direction) {
+            case up:
+            {
+                return (this.getTile(tile.getRow()-1, tile.getColumn()));
+            }
+            case down:
+            {
+                return(this.getTile(tile.getRow()+1, tile.getColumn()));
+            }
+            case left:
+            {
+                return(this.getTile(tile.getRow(), tile.getColumn()-1));
+            }
+            case right:
+            {
+                return (this.getTile(tile.getRow(), tile.getColumn()+1));
+            }
+            default:
+            {
+                return null;
+            }
+        }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public boolean isTilesNeighbors(Tile t1,Tile t2)
+    {
+        try {
+            int row1=t1.getRow();
+            int col1=t1.getColumn();
+            int row2=t2.getRow();
+            int col2=t2.getColumn();
+            if(row2==row1-1&&col2==col1)
+            {
+                if(t1.getDirections().contains(Direction.up)
+                        &&t2.getDirections().contains(Direction.down))
+                {
                     return true;
                 }
-                Collection<Tile> successors=getConnectedsTiles(n);
-                for(Tile t:successors){
-                    if(t!=null&&!closedSet.contains(t))
+            }
+            else if(row1==row2)
+            {
+                if(col2==col1-1)
+                {
+                    if(t1.getDirections().contains(Direction.left)
+                            &&t2.getDirections().contains(Direction.right))
                     {
-                        if(!queue.contains(t)){
-                            queue.add(t);
+                        return true;
+                    }
+                }
+                else if(col2==col1)
+                {
+                    throw new Exception("Error get the same tiles");
+                }
+                else if(col1+1==col2)
+                {
+                    if(t1.getDirections().contains(Direction.right)
+                            &&t2.getDirections().contains(Direction.left))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if(row1+1==row2&&col2==col1)
+            {
+                if(t1.getDirections().contains(Direction.down)
+                        &&t2.getDirections().contains(Direction.up))
+                {
+                    return true;
+                }
+            }
+        }catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
+    private boolean isTilesConnected(Tile t, Predicate<Tile> tilePredicate){ // this function check the connects batten pipes
+        Queue<Tile> queue=new LinkedList<Tile>();
+        HashSet<Tile> closedSet=new HashSet<Tile>();
+        queue.add(t);
+        while(!queue.isEmpty())
+        {
+            Tile n=queue.remove();// dequeue
+            closedSet.add(n);
+            try {
+                if(tilePredicate.test(n))
+                {
+                    return true;
+                }
+                Collection<Tile> successors=getNeighbors(n);
+                for(Tile tile:successors) {
+                    if(tile!=null&&!closedSet.contains(tile))
+                    {
+                        if(!queue.contains(tile)){
+                            queue.add(tile);
                         }
                     }
                 }
-            }catch (Exception e){
+            }catch (Exception e) {
                 //e.printStackTrace();
             }
         }
         return false;
     }
 
-    private Collection<Tile> getConnectedsTiles(Tile tile){ // get all connectors tiles on the board from specific tile
+    private Collection<Tile> getConnecteds(Tile tile){ // get all connectors tiles on the board from specific tile
         Collection<Tile> arrayList=new ArrayList<>(); // Create Collection of tiles
         int row=tile.getRow();
         int col=tile.getColumn();
         Tile tile2;
         Collection<Direction> directions=tile.getDirections(); // get directions from this specific tile
-        for(Direction dire:directions){
+        for(Direction d:directions){
             try {
-                tile2=null;
-                switch (dire){
-                    case up:
-                    {
-                        tile2=(this.getTile(row-1, col));
-                        break;
-                    }
-                    case down:
-                    {
-                        tile2=(this.getTile(row+1, col));
-                        break;
-                    }
-                    case left:
-                    {
-                        tile2=(this.getTile(row, col-1));
-                        break;
-                    }
-                    case right:
-                    {
-                        tile2=(this.getTile(row, col+1));
-                        break;
-                    }
-                    default:
-                    {
-                        break;
-                    }
-                }
+                tile2=getTileByTileAndDir(tile,d);
                 if(tile2!=null){ // if have tile this direction so add this tile to Collection
-                    if(tile.isTilesAreConnect(tile2)){
+                    if(tile.isTilesAreConnect(tile2))
+                    {
                         arrayList.add(tile2);
                     }
                 }
@@ -203,7 +298,20 @@ public class PipeGameBoard{
     }
 
     protected PipeGameBoard clone(){
-        return new PipeGameBoard(this);
+        PipeGameBoard pipeGameBoard=new PipeGameBoard();
+        pipeGameBoard.rows=this.rows;
+        pipeGameBoard.columns=this.columns;
+        pipeGameBoard.board=new Tile[rows][columns];
+        for(int i=0;i<rows;i++)
+        {
+            for(int j=0;j<columns;j++)
+            {
+                try {
+                    pipeGameBoard.board[i][j]=new Tile(this.getTile(i, j).getCh(),i,j);
+                }catch (Exception e) {}
+            }
+        }
+        return pipeGameBoard;
     }
 
     @Override
@@ -225,7 +333,11 @@ public class PipeGameBoard{
     }
 
     public void setBoard(Tile[][] board) {
-        this.board = board.clone();//////!!!!!!!!!!!!!!!!!!!
+        this.board=new Tile[board.length][];
+        for(int i=0;i<board.length;i++)
+        {
+            this.board[i] = Arrays.copyOf(board[i], board[i].length);
+        }
     }
     private void setBoard(char[][] chsboard) {
         setRows(chsboard.length);
@@ -257,20 +369,21 @@ public class PipeGameBoard{
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PipeGameBoard that = (PipeGameBoard) o;
-        return rows == that.rows &&
-                columns == that.columns &&
-                Arrays.equals(board, that.board);
+    public boolean equals(Object obj) {
+        if (!(obj instanceof PipeGameBoard))
+            return false;
+        if (obj == this)
+            return true;
+        return this.equals(((PipeGameBoard) obj));
+    }
+
+    public boolean equals(PipeGameBoard pipeGameBoard) {
+        return this.toString().equals(pipeGameBoard.toString());
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(rows, columns);
-        result = 31 * result + Arrays.hashCode(board);
-        return result;
+        return this.toString().hashCode();
     }
 
 

@@ -149,12 +149,12 @@ public class Tile {
 
     public int countRotations(){
         if(this.ch == '|' || this.ch == '-'){
-            return 1;
+            return 2;
         }
         if(this.ch == 's' || this.ch == 'g' || this.ch ==' '){
-            return 0;
+            return 1;
         }
-        return 3;
+        return 4;
     }
 
     public Direction isTilesNeighbors(Tile tile){ //If the tiles ​​are neighbors
@@ -182,46 +182,60 @@ public class Tile {
     }
 
     protected Tile clone(){ // create new instance
-        return new Tile(ch,row,column);
+        return new Tile(this.getCh(),row,column);
     }
 
     public Tile defaultTile(){ // set to default tile
-        Tile tile=this.clone();
+        char hashch=getCh();
         switch (this.ch) {
-            case '7': case 'J': case 'L': case 'F': {
-                tile.setCh('7');
+            case '-': case '|': {
+                hashch = '-';
                 break;
             }
-            case '-': case '|': {
-                tile.setCh('-');
+            case '7': case 'J': case 'L': case 'F': {
+                hashch = 'J';
+                break;
+            }
+            default:
+            {
                 break;
             }
         }
-        return tile;
+        return new Tile(hashch,row,column);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tile tile = (Tile) o;
-        return ch == tile.ch &&
-                row == tile.row &&
-                column == tile.column;
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Tile))
+            return false;
+        if (obj == this)
+            return true;
+        return this.equals(((Tile) obj));
     }
+
+    public boolean equals(Tile tile) {
+        return this.getCh()==tile.getCh()&&
+                this.getColumn()==tile.getColumn()&&
+                this.getRow()==tile.getRow();
+    }
+
 
     @Override
     public int hashCode() {
-        return Objects.hash(ch, row, column);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ch;
+        result = prime * result + column;
+        result = prime * result + row;
+        return result;
     }
+
 
     @Override
     public String toString() {
         return ch+"";
     }
-    
-    public Double countDistance(Tile tile){
-        return Math.hypot(tile.row-this.row,tile.column-this.column);
-    }
+
+
 
 }

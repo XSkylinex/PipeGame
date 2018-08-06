@@ -2,7 +2,7 @@ package classes;
 
 import java.util.Objects;
 
-public class State<T> {
+public class State<T> implements Comparable<State<T>>{
 
     private T state; // the state represented by a T
     private double cost; // cost to reach this state
@@ -45,18 +45,25 @@ public class State<T> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        State<?> state1 = (State<?>) o;
-        return Double.compare(state1.cost, cost) == 0 &&
-                Objects.equals(state, state1.state) &&
-                Objects.equals(cameFrom, state1.cameFrom);
+    public int compareTo(State<T> arg0) {
+        return Double.compare(this.getCost(),arg0.getCost());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof State))
+            return false;
+        if (obj == this)
+            return true;
+        return this.equals(((State<T>) obj));
+    }
+    public boolean equals(State<T> s){
+        return this.state.equals(s.state);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(state, cost, cameFrom);
+        return this.state.hashCode();
     }
 
     @Override

@@ -9,6 +9,9 @@ public class Rotations{
 
     Collection<String> collection;
     public Rotations(PipeGameBoard problem,PipeGameBoard solution) {
+
+
+
         collection=new ArrayList<>();
         Helper helper=new Helper(0,0,0);
         for(int i = 0 ; i < problem.getRows() ; i++ ){
@@ -24,7 +27,7 @@ public class Rotations{
                             break;
                         tile.rotate();
                     }
-                    helper.round=r;
+                    helper.round=r%tile.countRotations();
                     if(helper.round!=0)
                         collection.add(helper.toString());
                 } catch (Exception ignored) {}
