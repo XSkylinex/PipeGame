@@ -176,7 +176,7 @@ public class Tile {
         return null;
     }
 
-    public boolean istilesAreConnect(Tile tile){ // Checks if tiles are connected
+    public boolean isTilesAreConnect(Tile tile){ // Checks if tiles are connected
         return this.getDirections().contains(this.isTilesNeighbors(tile))&&
                 tile.getDirections().contains(tile.isTilesNeighbors(this));
     }

@@ -15,6 +15,7 @@ public class MyServer implements Server{
     public MyServer(int port) {
         this.port=port;
         stop=false;
+        ch=new MyClientHandler();
     }
 
     private void runServer() throws IOException {

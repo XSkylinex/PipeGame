@@ -1,9 +1,9 @@
 package classes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
+import enums.Direction;
+
+import java.util.*;
+import java.util.function.Predicate;
 
 public class PipeGameBoard{
 
@@ -75,7 +75,7 @@ public class PipeGameBoard{
                             gameBoardCollection.add(pipeGameBoard);
                         }
                     }
-                } catch (Exception e) {
+                } catch (Exception e){
                     e.printStackTrace();
                 }
             }
@@ -83,8 +83,123 @@ public class PipeGameBoard{
         return gameBoardCollection;
     }
 
-    public boolean isSolved(){
-        return true;
+    public boolean isSolved(){ // is solve this function check if we any goal connected to start
+        Collection<Tile> tilesgoals=getGoalsIndex(); // we create collection of all goals on the board
+        boolean flag;
+        for(Tile tgoal:tilesgoals){ // we ues for each to Search on goals
+            flag=isTilesConnectedToStart(tgoal);
+            if(!flag){
+                return false; // not connected return false
+            }
+        }
+        return true; //found return for start the game
+    }
+
+    public boolean isTilesConnectedToStart(Tile tile) {
+        return isTilesConnected(tile, Tile::isStart); // !!!----here is lambda expression----!!! here we check if we connected to the start
+    }
+    public boolean isTilesConnectedToGoal(Tile tile) {
+        return isTilesConnected(tile, Tile::isGoal); // !!!----here is lambda expression----!!! here we check if we connected to the goal
+    }
+
+    private boolean isTilesConnected(Tile tile, Predicate<Tile> tilePredicate){ // this function check the connects batten pipes
+        Queue<Tile> queue=new LinkedList<>(); // Create queue
+        HashSet<Tile> closedSet=new HashSet<>(); // Crate HashSet check the black hols for not step on the same tile twitch
+        queue.add(tile); // add to queue
+        while(!queue.isEmpty()){
+
+            Tile n=queue.remove(); // algorithm 1 to be continue
+            closedSet.add(n);
+            try{
+                if(tilePredicate.test(n)){
+                    return true;
+                }
+                Collection<Tile> successors=getConnectedsTiles(n);
+                for(Tile t:successors){
+                    if(t!=null&&!closedSet.contains(t))
+                    {
+                        if(!queue.contains(t)){
+                            queue.add(t);
+                        }
+                    }
+                }
+            }catch (Exception e){
+                //e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    private Collection<Tile> getConnectedsTiles(Tile tile){ // get all connectors tiles on the board from specific tile
+        Collection<Tile> arrayList=new ArrayList<>(); // Create Collection of tiles
+        int row=tile.getRow();
+        int col=tile.getColumn();
+        Tile tile2;
+        Collection<Direction> directions=tile.getDirections(); // get directions from this specific tile
+        for(Direction dire:directions){
+            try {
+                tile2=null;
+                switch (dire){
+                    case up:
+                    {
+                        tile2=(this.getTile(row-1, col));
+                        break;
+                    }
+                    case down:
+                    {
+                        tile2=(this.getTile(row+1, col));
+                        break;
+                    }
+                    case left:
+                    {
+                        tile2=(this.getTile(row, col-1));
+                        break;
+                    }
+                    case right:
+                    {
+                        tile2=(this.getTile(row, col+1));
+                        break;
+                    }
+                    default:
+                    {
+                        break;
+                    }
+                }
+                if(tile2!=null){ // if have tile this direction so add this tile to Collection
+                    if(tile.isTilesAreConnect(tile2)){
+                        arrayList.add(tile2);
+                    }
+                }
+            }catch (Exception e) {
+            }
+        }
+
+        return arrayList;
+    }
+
+    public Collection<Tile> getGoalsIndex() {
+        return getTilesIndexByPredicate(Tile::isGoal);
+    }
+    public Collection<Tile> getStartsIndex() {
+        return getTilesIndexByPredicate(Tile::isStart);
+    }
+
+    private Collection<Tile> getTilesIndexByPredicate(Predicate<Tile> tilePredicate)
+    {
+        Collection<Tile> tileCollection=new ArrayList<>(); // create collection of tiles
+        for(int i = 0 ; i < this.rows ; i++) { // run on all row
+            for (int j = 0; j < this.columns; j++){ // run on all columns
+                try {
+                    Tile tile=this.getTile(i,j); // get every tile - create new pointer
+                    if(tilePredicate.test(tile)){ // check if this tile pass the test
+                        tileCollection.add(tile); // if yes so add the goal to collection
+                    }
+                } catch (Exception ignored){ //java love to do that
+
+                }
+            }
+        }
+        return tileCollection;
     }
 
     protected PipeGameBoard clone(){

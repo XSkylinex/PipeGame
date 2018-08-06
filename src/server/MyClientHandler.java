@@ -43,7 +43,7 @@ public class MyClientHandler implements ClientHandler {
     }
 
 
-    private void readInputsAndSend(BufferedReader in, PrintWriter out, String exitStr) {
+    private void readInputsAndSend(BufferedReader in, PrintWriter out, String exitStr){
         try {
             String line;
             while(!(line=in.readLine()).equals(exitStr))
