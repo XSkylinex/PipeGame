@@ -57,24 +57,12 @@ public class Tile {
         return ch;
     }
 
-    public void setCh(char ch) {
-        this.ch = ch;
-    }
-
-    public int getRow() {
+        public int getRow() {
         return row;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getColumn() {
+       public int getColumn() {
         return column;
-    }
-
-    public void setColumn(int column) {
-        this.column = column;
     }
 
     public boolean isStart(){
@@ -88,12 +76,6 @@ public class Tile {
     public boolean isBlank(){
 
         return getCh()==' ';
-    }
-    public boolean isStraightLine(){
-        return getCh()=='-'||getCh()=='|';
-    }
-    public boolean isRightAngle(){
-        return getCh()=='7'|| getCh()=='J'|| getCh()=='L'|| getCh()=='F';
     }
 
     public Collection<Direction> getDirections(){

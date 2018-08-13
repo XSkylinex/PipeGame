@@ -27,7 +27,7 @@ public class MyCacheManager<T> implements CacheManager<Solution<T>>{
     }
 
     @Override
-    public void saveFile(String fileName, Solution<T> file) throws IOException { // from exercise 6 -b pincheta
+    public void saveFile(String fileName, Solution<T> file) throws IOException {
         ObjectOutputStream out=new ObjectOutputStream(new FileOutputStream(fileName+".txt"));
         out.writeObject(file);
         out.flush();
