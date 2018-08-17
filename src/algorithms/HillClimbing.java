@@ -16,24 +16,19 @@ public class HillClimbing<T> implements Searcher<T> {
 
     @Override
     public Solution<T> Search(Searchable<T> s) {
-        //Define the current state as an initial state
         State<T> next = s.getInitialState();
         Solution<T> result = new Solution<>();
-        //System.out.println("HillClimbing");
         long time0 = System.currentTimeMillis();
-        //Loop until the goal state is achieved or no more operators can be applied on the current state:
         while (System.currentTimeMillis() - time0 < timeToRun) {
 
             Collection<State<T>> neighbors = s.getAllPossibleStates(next);
-            if (Math.random() < 0.7&&!s.IsGoalState(next)) { // with a high probability
-                // find the best one
+            if (Math.random() < 0.7&&!s.IsGoalState(next)) {
                 int grade = 0;
                 for (State<T> state : neighbors) {
                     int g = (int)(state.getCost() *random.nextInt());
                     if (g > grade) {
                         grade = g;
                         next = state;
-                        //add this step to the solution
                         result.add(state);
                     }
                 }
@@ -47,8 +42,7 @@ public class HillClimbing<T> implements Searcher<T> {
     }
 
     @Override
-    public int getNumberOfNodesEvaluated() {
-        // TODO Auto-generated method stub
-        return -1;
+    public int getNumberOfNodesEvaluated() { // D"r Eli presentation
+        return 0;
     }
 }

@@ -89,12 +89,7 @@ public class Tile {
 
         return getCh()==' ';
     }
-    public boolean isStraightLine(){
-        return getCh()=='-'||getCh()=='|';
-    }
-    public boolean isRightAngle(){
-        return getCh()=='7'|| getCh()=='J'|| getCh()=='L'|| getCh()=='F';
-    }
+
 
     public Collection<Direction> getDirections(){
         Collection<Direction> directions=new ArrayList<Direction>();

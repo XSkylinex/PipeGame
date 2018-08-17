@@ -15,7 +15,7 @@ public class PipeGameBoard{
         this(new Tile[0][0],0,0);
     }
 
-    public PipeGameBoard(Tile[][] board, int rows, int columns){
+    public PipeGameBoard(Tile[][] board, int rows, int columns){ // Constructor
         setRows(0);
         setColumns(0);
         setBoard(board);

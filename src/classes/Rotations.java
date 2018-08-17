@@ -9,16 +9,13 @@ public class Rotations{
 
     Collection<String> collection;
     public Rotations(PipeGameBoard problem,PipeGameBoard solution) {
-
-
-
         collection=new ArrayList<>();
         Helper helper=new Helper(0,0,0);
         for(int i = 0 ; i < problem.getRows() ; i++ ){
             for(int j = 0 ; j < problem.getColumns() ; j++){
                 helper.row=i;
                 helper.col=j;
-                Tile tile= null;
+                Tile tile;
                 try {
                     tile = problem.getTile(i,j);
                     int r;

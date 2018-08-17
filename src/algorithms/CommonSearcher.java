@@ -32,14 +32,14 @@ public abstract class CommonSearcher<T> implements Searcher<T>{
     }
 
 
-    protected Solution<T> backTrace(State<T> goalState, State<T> startState) throws Exception{ // this function return all steps we did and add to collection
+    protected Solution<T> stepsWeDid(State<T> startState,State<T> goalState) throws Exception{ // this function return all steps we did and add to collection
         ArrayList<State<T>> arrayList=new ArrayList<>();
         arrayList.add(goalState);
         while(arrayList.get(0)!=null&&!arrayList.get(0).equals(startState)&&arrayList.get(0).getCameFrom()!=null){
             arrayList.add(0,arrayList.get(0).getCameFrom());
         }
         if(arrayList.isEmpty()){
-            throw new Exception("backTrace is empty");
+            throw new Exception("No steps taken");
         }
         return new Solution<>(arrayList);
     }
@@ -54,7 +54,7 @@ public abstract class CommonSearcher<T> implements Searcher<T>{
             closedSet.add(n);
             if(s.IsGoalState(n)){
                 try {
-                    return backTrace(n, s.getInitialState());
+                    return stepsWeDid(s.getInitialState(),n);
                     // private method, back traces through the parents
                 } catch (Exception e) {}
             }
