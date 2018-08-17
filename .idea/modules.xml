@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PTM1Runner/PTM1Runner.iml" filepath="$PROJECT_DIR$/PTM1Runner/PTM1Runner.iml" />
       <module fileurl="file://$PROJECT_DIR$/PipeGame.iml" filepath="$PROJECT_DIR$/PipeGame.iml" />
     </modules>
   </component>
