@@ -53,4 +53,11 @@ public class MyServer implements Server{
         stop=true;
 
     }
+
+    public static void main(String[] args) {
+        MyServer myServer = new MyServer(6400);
+        myServer.start(new MyClientHandler());
+    }
+
+
 }
